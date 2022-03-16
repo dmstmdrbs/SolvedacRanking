@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Container, Modal, Wrapper } from "./styles";
 
 interface Props {
@@ -12,8 +12,23 @@ const ManageBoard = ({ memberList, handleAddMember, handleCancelMember }: Props)
   const [modalOnOff, setModalOnOff] = useState(false);
 
   const handleClickModal = () => setModalOnOff(!modalOnOff);
-  const handleAdd = () => setPlus(true);
+  const handleAdd = () => {
+    setPlus(true);
+  };
+  useEffect(() => {
+    if (plus) {
+      inputRef.current?.focus();
+    }
+  }, [plus]);
 
+  function onBlur(e: React.FocusEvent<HTMLInputElement>) {
+    e.stopPropagation();
+    if (inputRef.current?.value) {
+      handleAddMember(inputRef.current.value);
+    }
+    setModalOnOff(false);
+    setPlus(false);
+  }
   return (
     <Container>
       <button onClick={handleClickModal}>팀원관리</button>
@@ -27,16 +42,7 @@ const ManageBoard = ({ memberList, handleAddMember, handleCancelMember }: Props)
               </p>
             </Wrapper>
           ))}
-          {plus && (
-            <input
-              ref={inputRef}
-              onBlur={() => {
-                inputRef.current !== null && handleAddMember(inputRef.current.value);
-                setPlus(false);
-                setModalOnOff(false);
-              }}
-            />
-          )}
+          {plus && <input ref={inputRef} onBlur={onBlur} />}
           <button onClick={handleAdd}>+</button>
         </Modal>
       )}

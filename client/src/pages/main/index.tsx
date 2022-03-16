@@ -1,33 +1,41 @@
 import Profile from "@components/profile";
 import ManageBoard from "@components/manageBoard";
+
 import { useQueries } from "react-query";
+import { IUser } from "@constants/index";
 import { fetchUserProfile } from "../../utils/api";
-import { Container, Wrapper, Logo } from "./styles";
-import { useState } from "react";
+import { Container, Columns, ColumnText, Wrapper, Logo } from "./styles";
+import { useEffect, useState } from "react";
 
 const Main = () => {
-  const [memberList, setMemberList] = useState(["maxcha98", "dmstmdrbs", "dre12am14", "tjdqls1668", "tph00300"]);
-  const handleAddMember = (member: string) => setMemberList([...memberList, member]);
-  const handleCancelMember = (member: string) => setMemberList(memberList.filter((v) => v !== member));
+  const [memberList, setMemberList] = useState(["maxcha98", "dre12am14", "tjdqls1668", "tph00300"]);
+  const userQueries = useQueries(
+    memberList.map((handle) => ({ queryKey: ["user", handle], queryFn: () => fetchUserProfile(handle) }))
+  ).sort((a, b) => (!a.isLoading && !b.isLoading ? b.data.maxStreak - a.data.maxStreak : 0));
 
-  const result = useQueries(
-    memberList.map((element) => ({ queryKey: ["user-data", element], queryFn: () => fetchUserProfile(element) }))
-  );
+  const handleAddMember = (member: string) => setMemberList([...memberList, member]);
+  const handleCancelMember = (member: string) => setMemberList(memberList.filter((element) => element !== member));
+
   return (
     <Container>
       <Logo>AJOU</Logo>
+
       <Wrapper>
-        {result.map((element, i) => {
-          const { isLoading: userDataLoading, data: userData } = element;
-          if (userDataLoading)
-            return (
-              <div key={i}>
-                <h1>Loading...</h1>
-              </div>
-            );
-          else if (userData === undefined) return <p>없어</p>;
-          else return <Profile {...userData} />;
-        })}
+        <Columns>
+          <ColumnText>프로필</ColumnText>
+          <ColumnText>닉네임</ColumnText>
+          <ColumnText>점수</ColumnText>
+          <ColumnText>스트릭</ColumnText>
+        </Columns>
+        {userQueries.map(({ isLoading, data }, idx) =>
+          isLoading ? (
+            <div key={idx}>
+              <h1>Loading...</h1>
+            </div>
+          ) : (
+            <div key={data?.handle}>{data !== undefined && <Profile {...data} />}</div>
+          )
+        )}
       </Wrapper>
       <ManageBoard memberList={memberList} handleAddMember={handleAddMember} handleCancelMember={handleCancelMember} />
     </Container>
