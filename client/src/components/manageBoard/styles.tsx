@@ -26,4 +26,20 @@ const Modal = styled.div`
   border-radius: 20px;
 `;
 
-export { Container, Modal };
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+
+  .cancel {
+    display: none;
+    cursor: pointer;
+    :hover {
+      opacity: 50%;
+    }
+  }
+  :hover .cancel {
+    display: block;
+  }
+`;
+
+export { Container, Modal, Wrapper };
