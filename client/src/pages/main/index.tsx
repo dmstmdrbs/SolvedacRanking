@@ -8,7 +8,15 @@ import { Container, Columns, ColumnText, Wrapper, Logo } from "./styles";
 import { useEffect, useState } from "react";
 
 const Main = () => {
-  const [memberList, setMemberList] = useState(["maxcha98", "dre12am14", "tjdqls1668", "tph00300"]);
+  const [memberList, setMemberList] = useState([
+    "maxcha98",
+    "dre12am14",
+    "tjdqls1668",
+    "tph00300",
+    "dmstmdrbs",
+    "jmkabc31",
+    "kevindec18",
+  ]);
   const userQueries = useQueries(
     memberList.map((handle) => ({ queryKey: ["user", handle], queryFn: () => fetchUserProfile(handle) }))
   ).sort((a, b) => (!a.isLoading && !b.isLoading ? b.data.maxStreak - a.data.maxStreak : 0));
