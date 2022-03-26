@@ -1,11 +1,10 @@
 import Profile from "@components/profile";
 import ManageBoard from "@components/manageBoard";
-
+import DarkModeBtn from "@components/button/dark";
 import { useQueries } from "react-query";
-import { IUser } from "@constants/index";
 import { fetchUserProfile } from "../../utils/api";
 import { Container, Columns, ColumnText, Wrapper, Logo } from "./styles";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Main = () => {
   const [memberList, setMemberList] = useState([
@@ -27,12 +26,11 @@ const Main = () => {
   return (
     <Container>
       <Logo>AJOU</Logo>
-
       <Wrapper>
         <Columns>
           <ColumnText>프로필</ColumnText>
           <ColumnText>닉네임</ColumnText>
-          <ColumnText>점수</ColumnText>
+          <ColumnText>랭킹</ColumnText>
           <ColumnText>스트릭</ColumnText>
         </Columns>
         {userQueries.map(({ isLoading, data }, idx) =>
@@ -46,6 +44,7 @@ const Main = () => {
         )}
       </Wrapper>
       <ManageBoard memberList={memberList} handleAddMember={handleAddMember} handleCancelMember={handleCancelMember} />
+      <DarkModeBtn />
     </Container>
   );
 };
