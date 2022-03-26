@@ -8,6 +8,7 @@ const Reset = css`
   body.dark {
     background-color: rgb(21, 32, 43);
     color: white;
+    div,
     button,
     a {
       color: white;

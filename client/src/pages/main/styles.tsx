@@ -24,6 +24,7 @@ const Columns = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  border: 1px solid;
   background: rgb(28, 98, 204);
   color: #e4e4e4;
 `;

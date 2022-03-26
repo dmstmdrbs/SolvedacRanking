@@ -9,7 +9,7 @@ const Container = styled.div`
   button {
     font-size: 1rem;
     border: none;
-    background-color: white;
+    background-color: unset;
     cursor: pointer;
     :hover {
       opacity: 50%;

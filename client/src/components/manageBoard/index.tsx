@@ -8,6 +8,8 @@ interface Props {
 }
 const ManageBoard = ({ memberList, handleAddMember, handleCancelMember }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const [plus, setPlus] = useState(false);
   const [modalOnOff, setModalOnOff] = useState(false);
 
@@ -21,6 +23,11 @@ const ManageBoard = ({ memberList, handleAddMember, handleCancelMember }: Props)
     }
   }, [plus]);
 
+  const handleClickOutside = (e: any) => {
+    if (!(divRef.current && !divRef.current.contains(e.target)) || buttonRef.current?.contains(e.target)) return;
+    setModalOnOff(false);
+  };
+
   function onBlur(e: React.FocusEvent<HTMLInputElement>) {
     e.stopPropagation();
     if (inputRef.current?.value) {
@@ -29,11 +36,19 @@ const ManageBoard = ({ memberList, handleAddMember, handleCancelMember }: Props)
     setModalOnOff(false);
     setPlus(false);
   }
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [divRef]);
+
   return (
     <Container>
-      <button onClick={handleClickModal}>팀원관리</button>
+      <button ref={buttonRef} onClick={handleClickModal}>
+        팀원관리
+      </button>
       {modalOnOff && (
-        <Modal>
+        <Modal ref={divRef}>
           {memberList.map((element) => (
             <Wrapper key={element}>
               <p>{element}</p>

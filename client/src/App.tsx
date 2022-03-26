@@ -1,6 +1,7 @@
 import Main from "@pages/main/index";
 import styled from "@emotion/styled";
 import { useEffect } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const Container = styled.div`
   width: 100vw;
@@ -22,9 +23,14 @@ function App() {
       }
     });
   });
+
   return (
     <Container>
-      <Main />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Main />} />
+        </Routes>
+      </BrowserRouter>
     </Container>
   );
 }
